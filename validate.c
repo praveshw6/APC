@@ -53,7 +53,7 @@ int main(int argc , char **argv)
 
 
     // to checking argv[3] is digit or not 
-      flag=1;
+      flag=111111;
 
     while(argv[3][i]!='\0')
     {
