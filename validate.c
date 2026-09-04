@@ -1,5 +1,8 @@
 #include<stdio.h>
 #include<ctype.h>
+#include"hedder.h"
+
+
 
 int main(int argc , char **argv)
 {
@@ -27,6 +30,7 @@ int main(int argc , char **argv)
     if(flag)
     {
         printf("The argv is an digit %s\n",argv[1]);
+
     }
     else
     {
@@ -51,9 +55,13 @@ int main(int argc , char **argv)
         }
 
 
+        
+
+
 
     // to checking argv[3] is digit or not 
-      flag=111111;
+      flag=1;
+      i=0;
 
     while(argv[3][i]!='\0')
     {
@@ -68,9 +76,25 @@ int main(int argc , char **argv)
     if(flag)
     {
         printf("The argv is an digit %s\n",argv[3]);
+        //func(argv);
+        
+
     }
     else
     {
         printf("ERROR:The argv is not digit %s\n",argv[3]);
     }
+
+    
+     if (func(argv) == FAILURE)
+    {
+        printf("ERROR: Memory allocation failed\n");
+        return FAILURE;
+    }
+
+
+    
+      
+       return SUCCESS;
+    
 }
