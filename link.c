@@ -83,34 +83,39 @@ int func(char **argv)
     }
   
 
-     print_list(head1);
-    print_list2(head2);
 
+    print_list(head1,1);
+     printf("\n");
+     print_list2(head2,2);
+     printf("\n");
+     
 // to doing the operations 
 
     if(argv[2][0]=='+')
     {
-        ADD(tail1,tail2);// calling the addition function
+        add(tail1,tail2);// calling the addition function
         
     }
-    else  if(argv[2][0]=='-')
-    {
-        SUB(tail1,tail2);
-        return SUCCESS;
-    }
-     if(argv[2][0]=='*')
-    {
-       MUL(tail1,tail2);
-        return SUCCESS;
-    }
-     if(argv[2][0]=='/')
-    {
-        DIV(tail1,tail2);
-        return SUCCESS;
-    }
+    // else  if(argv[2][0]=='-')
+    // {
+    //     SUB(tail1,tail2);
+    //     return SUCCESS;
+    // }
+    //  else if(argv[2][0]=='*')
+    // {
+    //    MUL(tail1,tail2);
+    //     return SUCCESS;
+    // }
+    // else  if(argv[2][0]=='/')
+    // {
+    //     DIV(tail1,tail2);
+    //     return SUCCESS;
+    // }
 
 
 
+     
+     //print_final(head3);
 
 
 

@@ -13,8 +13,12 @@ typedef struct LIST
  
 
 int func(char **argv);
-void print_list(Dlist *head);
-void print_list2(Dlist *head2);
-void print_list(Dlist *head);
+void print_final(Dlist *head3,int );
+void print_list(Dlist *head,int );
+void print_list2(Dlist *head2,int );
+
+//void print_list(Dlist *head);
+int add(Dlist *tail1,Dlist *tail2);
+
 
 #endif
