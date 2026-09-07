@@ -55,8 +55,8 @@ void print_list2(Dlist *head2,int llist_no2)
     {
         printf("%d", temp1->data);
 
-        if(temp1->next != NULL)
-            printf(" <-> ");
+        //if(temp1->next != NULL)
+           // printf(" <-> ");
 
         temp1 = temp1->next;
     }

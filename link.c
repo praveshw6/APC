@@ -101,11 +101,11 @@ int func(char **argv)
         sub(tail1,tail2);
         return SUCCESS;
     }
-    //  else if(argv[2][0]=='*')
-    // {
-    //    MUL(tail1,tail2);
-    //     return SUCCESS;
-    // }
+     else if(argv[2][0]=='*')
+    {
+       mul(tail1,tail2);
+        return SUCCESS;
+     }
     // else  if(argv[2][0]=='/')
     // {
     //     DIV(tail1,tail2);
