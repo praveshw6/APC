@@ -96,11 +96,11 @@ int func(char **argv)
         add(tail1,tail2);// calling the addition function
         
     }
-    // else  if(argv[2][0]=='-')
-    // {
-    //     SUB(tail1,tail2);
-    //     return SUCCESS;
-    // }
+     else  if(argv[2][0]=='-')
+    {
+        sub(tail1,tail2);
+        return SUCCESS;
+    }
     //  else if(argv[2][0]=='*')
     // {
     //    MUL(tail1,tail2);

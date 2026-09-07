@@ -4,17 +4,17 @@
 #include <stdlib.h>
 
 
-int add(Dlist *tail1, Dlist *tail2)
+int add(Dlist *tail1, Dlist *tail2)//to passing the tail adress
 {
     Dlist *temp1 = tail1;
     Dlist *temp2 = tail2;
 
-    Dlist *head3 = NULL;
+    Dlist *head3 = NULL;//create and set head and tail as null
     Dlist *tail3 = NULL;
 
-    int carry = 0;
+    int carry = 0;// set carry as zero 
 
-    while (temp1 != NULL || temp2 != NULL || carry)
+    while (temp1 != NULL || temp2 != NULL || carry)//loop run until both reaching null
     {
         int data1 = 0;
         int data2 = 0;
