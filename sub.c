@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hedder.h"
+
 int sub(Dlist *tail1, Dlist *tail2)
 {
     Dlist *head4 = NULL;
     Dlist *tail4 = NULL;
-
     Dlist *temp1;
     Dlist *temp2;
     Dlist *t1;
@@ -20,22 +20,42 @@ int sub(Dlist *tail1, Dlist *tail2)
     int borrow = 0;
     int digit;
 
-    /* Count digits of first number */
+    /* Go to HEAD of both numbers */
     t1 = tail1;
+    while (t1->prev != NULL)
+        t1 = t1->prev;
 
-    while (t1 != NULL)
+    t2 = tail2;
+    while (t2->prev != NULL)
+        t2 = t2->prev;
+
+    /*
+     * Ignore leading zeros
+     *
+     * 000011 -> 11
+     * 0012   -> 12
+     */
+    while (t1->data == 0 && t1->next != NULL)
+        t1 = t1->next;
+
+    while (t2->data == 0 && t2->next != NULL)
+        t2 = t2->next;
+
+    /* Count actual digits */
+    Dlist *p = t1;
+
+    while (p != NULL)
     {
         count1++;
-        t1 = t1->prev;
+        p = p->next;
     }
 
-    /* Count digits of second number */
-    t2 = tail2;
+    p = t2;
 
-    while (t2 != NULL)
+    while (p != NULL)
     {
         count2++;
-        t2 = t2->prev;
+        p = p->next;
     }
 
     /* Compare number of digits */
@@ -49,10 +69,7 @@ int sub(Dlist *tail1, Dlist *tail2)
     }
     else
     {
-        /* Same number of digits - compare digit by digit */
-        t1 = tail1;
-        t2 = tail2;
-
+        /* Same number of digits */
         while (t1 != NULL && t2 != NULL)
         {
             if (t1->data > t2->data)
@@ -66,8 +83,8 @@ int sub(Dlist *tail1, Dlist *tail2)
                 break;
             }
 
-            t1 = t1->prev;
-            t2 = t2->prev;
+            t1 = t1->next;
+            t2 = t2->next;
         }
     }
 
@@ -78,11 +95,21 @@ int sub(Dlist *tail1, Dlist *tail2)
         return SUCCESS;
     }
 
-    /* If first number is smaller, swap them */
+    /*
+     * If first number is smaller,
+     * calculate second - first
+     */
     if (cmp < 0)
     {
         temp1 = tail2;
         temp2 = tail1;
+
+        /* Move to last non-zero-relevant digit */
+        while (temp1->next != NULL)
+            temp1 = temp1->next;
+
+        while (temp2->next != NULL)
+            temp2 = temp2->next;
 
         printf("-");
     }
@@ -92,11 +119,10 @@ int sub(Dlist *tail1, Dlist *tail2)
         temp2 = tail2;
     }
 
-    /* Subtraction */
+    /* Subtraction from right to left */
     while (temp1 != NULL)
     {
         data1 = temp1->data;
-        temp1 = temp1->prev;
 
         if (temp2 != NULL)
         {
@@ -107,6 +133,8 @@ int sub(Dlist *tail1, Dlist *tail2)
         {
             data2 = 0;
         }
+
+        temp1 = temp1->prev;
 
         /* Apply borrow */
         data1 = data1 - borrow;
@@ -123,7 +151,6 @@ int sub(Dlist *tail1, Dlist *tail2)
 
         digit = data1 - data2;
 
-        /* Create new node */
         Dlist *new = malloc(sizeof(Dlist));
 
         if (new == NULL)
@@ -147,7 +174,7 @@ int sub(Dlist *tail1, Dlist *tail2)
         }
     }
 
-    /* Remove leading zeros */
+    /* Remove leading zeros from result */
     while (head4 != NULL &&
            head4->data == 0 &&
            head4->next != NULL)
@@ -164,6 +191,3 @@ int sub(Dlist *tail1, Dlist *tail2)
 
     return SUCCESS;
 }
-
-
-

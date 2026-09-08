@@ -19,6 +19,7 @@ void print_list2(Dlist *head2,int );
 int sub(Dlist *tail1, Dlist *tail2);
 int add(Dlist *tail1,Dlist *tail2);
 int mul(Dlist *tail1, Dlist *tail2);
+int division(Dlist *tail1, Dlist *tail2);
 
 
 #endif

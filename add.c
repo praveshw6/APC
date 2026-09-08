@@ -33,7 +33,8 @@ int add(Dlist *tail1, Dlist *tail2)//to passing the tail adress
 
         int digit = data1 + data2 + carry;
 
-        carry = digit / 10;
+        //carry = digit / 10;
+        
         digit = digit % 10;
 
         Dlist *new = malloc(sizeof(Dlist));

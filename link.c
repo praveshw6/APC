@@ -86,7 +86,7 @@ int func(char **argv)
 
     print_list(head1,1);
      printf("\n");
-     print_list2(head2,2);
+     print_list(head2,2);
      printf("\n");
      
 // to doing the operations 
@@ -103,14 +103,14 @@ int func(char **argv)
     }
      else if(argv[2][0]=='*')
     {
-       mul(tail1,tail2);
+        mul(tail1,tail2);
         return SUCCESS;
      }
-    // else  if(argv[2][0]=='/')
-    // {
-    //     DIV(tail1,tail2);
-    //     return SUCCESS;
-    // }
+    else  if(argv[2][0]=='/')
+    {
+        division(tail1,tail2);
+        return SUCCESS;
+    }
 
 
 
