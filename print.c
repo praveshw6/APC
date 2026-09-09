@@ -8,7 +8,7 @@ void print_list(Dlist *head1,int list_no1)
 {
     Dlist *temp = head1;
 
-   // printf("HEAD1 -> ");
+    //printf("RESULT= ");
 
     while(temp != NULL)
     {
@@ -33,7 +33,7 @@ void print_list(Dlist *head1,int list_no1)
     {
           Dlist *temp1 = head3;
 
-   // printf("HEAD3 -> ");
+     //printf("RESULT = ");
 
     while(temp1 != NULL)
     {

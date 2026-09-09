@@ -1,104 +1,144 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "hedder.h"      
+#include "hedder.h"
+
 int mul(Dlist *tail1, Dlist *tail2)
 {
     Dlist *temp1 = tail1;
     Dlist *temp2 = tail2;
 
-    Dlist *head5 = NULL;
-    Dlist *tail5 = NULL;
+    Dlist *head3 = NULL;
+    Dlist *tail3 = NULL;
 
-    int carry, digit, product;
-    int shift = 0;
-
-    /* Result array for easier multiplication */
-    int result[1000] = {0};
-    int i = 0, j = 0;
+    int count1 = 0;
+    int count2 = 0;
 
     /* Count digits in first number */
-    temp1 = tail1;
     while (temp1 != NULL)
     {
-        i++;
+        count1++;
         temp1 = temp1->prev;
     }
 
     /* Count digits in second number */
-    temp2 = tail2;
     while (temp2 != NULL)
     {
-        j++;
+        count2++;
         temp2 = temp2->prev;
     }
 
-    /* Store first number in array */
-    int num1[i];
-    int num2[j];
+    /* Arrays for storing digits */
+    int *arr1 = malloc(count1 * sizeof(int));
+    int *arr2 = malloc(count2 * sizeof(int));
+    int *result = calloc(count1 + count2, sizeof(int));
 
-    temp1 = tail1;
-    for (int k = i - 1; k >= 0; k--)
+    if (arr1 == NULL || arr2 == NULL || result == NULL)
     {
-        num1[k] = temp1->data;
+        free(arr1);
+        free(arr2);
+        free(result);
+        return FAILURE;
+    }
+
+    /* Copy first number into array */
+    temp1 = tail1;
+
+    for (int i = count1 - 1; i >= 0; i--)
+    {
+        arr1[i] = temp1->data;
         temp1 = temp1->prev;
     }
 
-    /* Store second number in array */
+    /* Copy second number into array */
     temp2 = tail2;
-    for (int k = j - 1; k >= 0; k--)
+
+    for (int i = count2 - 1; i >= 0; i--)
     {
-        num2[k] = temp2->data;
+        arr2[i] = temp2->data;
         temp2 = temp2->prev;
     }
 
-    /* Multiplication */
-    for (int a = i - 1; a >= 0; a--)
+    /*
+     * Multiplication
+     *
+     * Exaple:
+     *       1 2
+     *   x 1 2 3
+     *   --------
+     *       ...
+     */
+    for (int i = count1 - 1; i >= 0; i--)
     {
-        carry = 0;
-
-        for (int b = j - 1; b >= 0; b--)
+        for (int j = count2 - 1; j >= 0; j--)
         {
-            int pos = (i - 1 - a) + (j - 1 - b);
-
-            product = num1[a] * num2[b] + result[pos] + carry;
-
-            result[pos] = product % 10;
-            carry = product / 10;
+            result[i + j + 1] =
+                result[i + j + 1] + arr1[i] * arr2[j];
         }
-
-        if (carry)
-            result[(i - 1 - a) + j] += carry;
     }
 
-    /* Find actual result size */
-    int size = i + j;
+    /* Handle carry */
+    for (int i = count1 + count2 - 1; i > 0; i--)
+    {
+        result[i - 1] =
+            result[i - 1] + result[i] / 10;
 
-    while (size > 1 && result[size - 1] == 0)
-        size--;
+        result[i] = result[i] % 10;
+    }
 
-    /* Create result linked list */
-    for (int k = size - 1; k >= 0; k--)
+    /* Remove leading zeros */
+    int start = 0;
+
+    while (start < count1 + count2 - 1 && result[start] == 0)
+    {
+        start++;
+    }
+
+    /* Create result doubly linked list */
+    for (int i = start; i < count1 + count2; i++)
     {
         Dlist *new = malloc(sizeof(Dlist));
 
-        new->data = result[k];
-        new->next = NULL;
-        new->prev = NULL;
-
-        if (head5 == NULL)
+        if (new == NULL)
         {
-            head5 = new;
-            tail5 = new;
+            free(arr1);
+            free(arr2);
+            free(result);
+            return FAILURE;
+        }
+
+        new->data = result[i];
+        new->prev = NULL;
+        new->next = NULL;
+
+        if (head3 == NULL)
+        {
+            head3 = new;
+            tail3 = new;
         }
         else
         {
-            new->next = head5;
-            head5->prev = new;
-            head5 = new;
+            new->prev = tail3;
+            tail3->next = new;
+            tail3 = new;
         }
     }
-    print_final(head5, 5);
+
+    /* Print multiplication result */
+    print_final(head3,5);
+    /* Free arrays */
+    free(arr1);
+    free(arr2);
+    free(result);
+
+    /* Free result list */
+    temp1 = head3;
+
+    while (temp1 != NULL)
+    {
+        Dlist *next = temp1->next;
+        free(temp1);
+        temp1 = next;
+    }
 
     return SUCCESS;
-
 }
