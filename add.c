@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "hedder.h"
 
-int add(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
+Dlist *add(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
 {
     Dlist *temp1 = tail1;
     Dlist *temp2 = tail2;
@@ -36,24 +36,26 @@ int add(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
         /* Equal numbers */
         if (num1 == num2)
         {
-            printf("0\n");
-            return SUCCESS;
+            Dlist *new_node = malloc(sizeof(Dlist));
+
+            if (new_node == NULL)
+                return NULL;
+
+            new_node->data = 0;
+            new_node->prev = NULL;
+            new_node->next = NULL;
+
+            return new_node;
         }
 
         /* Bigger number decides subtraction */
         if (num1 > num2)
         {
-            if (sign1 == '-')
-                printf("-");
-
-             return sub(tail2, tail1,sign1,sign2);
+            return sub(tail1, tail2, sign1, sign2);
         }
         else
         {
-            if (sign2 == '-')
-                printf("-");
-
-            return sub(tail2, tail1,sign1,sign2);
+            return sub(tail2, tail1, sign1, sign2);
         }
     }
 
@@ -83,7 +85,7 @@ int add(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
         Dlist *new_node = malloc(sizeof(Dlist));
 
         if (new_node == NULL)
-            return FAILURE;
+            return NULL;
 
         new_node->data = digit;
         new_node->prev = NULL;
@@ -101,11 +103,6 @@ int add(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
         head3 = new_node;
     }
 
-    if (sign1 == '-')
-        printf("-");
-
-    print_final(head3, 3);
-    printf("\n");
-
-    return SUCCESS;
+    /* Return TAIL */
+    print_final(head3,5);
 }

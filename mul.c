@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "hedder.h"
 
-int mul(Dlist *tail1, Dlist *tail2)
+Dlist *mul(Dlist *tail1, Dlist *tail2)
 {
     Dlist *temp1 = tail1;
     Dlist *temp2 = tail2;
@@ -140,5 +140,5 @@ int mul(Dlist *tail1, Dlist *tail2)
         temp1 = next;
     }
 
-    return SUCCESS;
+   
 }

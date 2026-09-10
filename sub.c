@@ -2,161 +2,143 @@
 #include <stdlib.h>
 #include "hedder.h"
 
-int sub(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
+Dlist *sub(Dlist *tail1, Dlist *tail2, char sign1, char sign2)
 {
-    Dlist *head4 = NULL;
-    Dlist *tail4 = NULL;
-    Dlist *temp1, *temp2, *p;
-    int count1 = 0, count2 = 0;
+    Dlist *t1 = tail1;
+    Dlist *t2 = tail2;
+    Dlist *head = NULL;
+    Dlist *tail = NULL;
+
+    int borrow = 0;
+    int n1 = 0;
+    int n2 = 0;
     int cmp = 0;
-    int data1, data2, borrow = 0, digit;
 
-    /* -A - B = -(A + B) */
-    if (sign1 == '-' && sign2 == '+')
+    while (t1->prev)
+        t1 = t1->prev;
+
+    while (t2->prev)
+        t2 = t2->prev;
+
+    while (t1->data == 0 && t1->next)
+        t1 = t1->next;
+
+    while (t2->data == 0 && t2->next)
+        t2 = t2->next;
+
+    Dlist *p = t1;
+
+    while (p)
     {
-        printf("-");
-        add(tail1, tail2, '+', '+');
-        return SUCCESS;
-    }
-
-    /* A - (-B) = A + B */
-    if (sign1 == '+' && sign2 == '-')
-    {
-        add(tail1, tail2, '+', '+');
-        return SUCCESS;
-    }
-
-    /* -A - (-B) = B - A */
-    if (sign1 == '-' && sign2 == '-')
-    {
-        return sub(tail2, tail1, '+', '+');
-    }
-
-    /* Find HEAD */
-    temp1 = tail1;
-    temp2 = tail2;
-
-    while (temp1->prev != NULL)
-        temp1 = temp1->prev;
-
-    while (temp2->prev != NULL)
-        temp2 = temp2->prev;
-
-    /* Remove leading zeros */
-    while (temp1->data == 0 && temp1->next != NULL)
-        temp1 = temp1->next;
-
-    while (temp2->data == 0 && temp2->next != NULL)
-        temp2 = temp2->next;
-
-    /* Count digits */
-    p = temp1;
-    while (p != NULL)
-    {
-        count1++;
+        n1++;
         p = p->next;
     }
 
-    p = temp2;
-    while (p != NULL)
+    p = t2;
+
+    while (p)
     {
-        count2++;
+        n2++;
         p = p->next;
     }
 
-    /* Compare */
-    if (count1 > count2)
+    if (n1 > n2)
         cmp = 1;
-    else if (count1 < count2)
+    else if (n1 < n2)
         cmp = -1;
     else
     {
-        while (temp1 != NULL)
+        while (t1)
         {
-            if (temp1->data != temp2->data)
+            if (t1->data > t2->data)
             {
-                cmp = (temp1->data > temp2->data) ? 1 : -1;
+                cmp = 1;
                 break;
             }
 
-            temp1 = temp1->next;
-            temp2 = temp2->next;
+            if (t1->data < t2->data)
+            {
+                cmp = -1;
+                break;
+            }
+
+            t1 = t1->next;
+            t2 = t2->next;
         }
     }
 
-    /* Equal */
     if (cmp == 0)
     {
-        printf("0\n");
-        return SUCCESS;
+        Dlist *new = malloc(sizeof(Dlist));
+
+        if (!new)
+            return NULL;
+
+        new->data = 0;
+        new->prev = NULL;
+        new->next = NULL;
+
+        return new;
     }
 
-    /* Smaller - bigger */
     if (cmp < 0)
     {
-        temp1 = tail2;
-        temp2 = tail1;
-        printf("-");
-    }
-    else
-    {
-        temp1 = tail1;
-        temp2 = tail2;
+        Dlist *temp = tail1;
+        tail1 = tail2;
+        tail2 = temp;
+
+        if (sign1 == '+' && sign2 == '+')
+            printf("-");
     }
 
-    /* Subtraction */
-    while (temp1 != NULL)
+    t1 = tail1;
+    t2 = tail2;
+
+    while (t1)
     {
-        data1 = temp1->data - borrow;
+        int a = t1->data - borrow;
+        int b = 0;
 
-        if (temp2 != NULL)
-        {
-            data2 = temp2->data;
-            temp2 = temp2->prev;
-        }
-        else
-            data2 = 0;
+        if (t2)
+            b = t2->data;
 
-        if (data1 < data2)
+        if (a < b)
         {
-            data1 += 10;
+            a = a + 10;
             borrow = 1;
         }
         else
             borrow = 0;
 
-        digit = data1 - data2;
-
         Dlist *new = malloc(sizeof(Dlist));
 
-        if (new == NULL)
-            return FAILURE;
+        if (!new)
+            return NULL;
 
-        new->data = digit;
+        new->data = a - b;
         new->prev = NULL;
-        new->next = head4;
+        new->next = head;
 
-        if (head4 != NULL)
-            head4->prev = new;
+        if (head)
+            head->prev = new;
         else
-            tail4 = new;
+            tail = new;
 
-        head4 = new;
+        head = new;
 
-        temp1 = temp1->prev;
+        t1 = t1->prev;
+
+        if (t2)
+            t2 = t2->prev;
     }
 
-    /* Remove leading zeros */
-    while (head4->data == 0 && head4->next != NULL)
+    while (head->data == 0 && head->next)
     {
-        Dlist *temp = head4;
-        head4 = head4->next;
-        head4->prev = NULL;
+        Dlist *temp = head;
+        head = head->next;
         free(temp);
+        head->prev = NULL;
     }
 
-    print_final(head4, 4);
-    printf("\n");
-
-    return SUCCESS;
+    return tail;
 }
